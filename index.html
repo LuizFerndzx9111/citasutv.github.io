@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda tu Cita - Estilo Minimalista</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración para usar la fuente Inter y colores -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#1e3a8a', // Un azul oscuro profundo
+                        'accent-cyan': '#06b6d4', // Un cian brillante para botones
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Aplicar la fuente Inter globalmente */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Clase para el efecto de pulsación en el botón */
+        .btn-push {
+            transition: all 0.15s ease-out;
+        }
+        .btn-push:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Fondo con imagen y overlay */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+        }
+
+        /* Aquí se define la imagen de fondo (Buggy Can-Am Maverick X3 4-door) */
+        .background-image {
+            background-image: url('File_20251022-175411.png');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(80%) blur(1px); /* Tono frío y ligero desenfoque */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay azul oscuro */
+        .background-overlay {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 25, 47, 0.85); /* Azul muy oscuro con transparencia */
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Contenedor del Fondo (Imagen + Overlay Azul) -->
+    <div class="background-container">
+        <div class="background-image"></div>
+        <div class="background-overlay"></div>
+    </div>
+
+    <!-- Contenedor Principal del Formulario -->
+    <div id="form-container" class="w-full max-w-md bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-xl shadow-2xl transition-all duration-300 transform scale-100 hover:scale-[1.01] mx-4 my-8">
+
+        <h1 class="text-3xl font-extrabold text-primary-blue mb-4 text-center">
+            Agenda tu Experiencia
+        </h1>
+        <p class="text-gray-600 mb-6 text-center">
+            Elige tu fecha y servicio, y te confirmaremos en minutos.
+        </p>
+
+        <!-- Formulario de Agendamiento -->
+        <form id="appointment-form" class="space-y-6">
+            
+            <!-- Campo Nombre Completo -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo 🖊️</label>
+                <input type="text" id="name" name="name" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-accent-cyan focus:border-accent-cyan transition duration-150 ease-in-out text-gray-800 placeholder-gray-400"
+                       placeholder="Tu nombre y apellido">
+            </div>
+
+            <!-- Campo Teléfono -->
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono (WhatsApp) 🤙🏻</label>
+                <input type="tel" id="phone" name="phone" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-accent-cyan focus:border-accent-cyan transition duration-150 ease-in-out text-gray-800 placeholder-gray-400"
+                       placeholder="Ej: 809444XXXX">
+            </div>
+
+            <!-- Campo Servicio (Botones Minimalistas) -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Servicio Requerido 🛠️</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" data-value="Mantenimiento" 
+                            class="service-btn bg-gray-100 text-gray-700 py-3 rounded-xl shadow-md hover:bg-primary-blue hover:text-white transition duration-200 ease-in-out font-semibold text-sm btn-push">
+                        Mantenimiento General
+                    </button>
+                    <button type="button" data-value="Reparación" 
+                            class="service-btn bg-gray-100 text-gray-700 py-3 rounded-xl shadow-md hover:bg-primary-blue hover:text-white transition duration-200 ease-in-out font-semibold text-sm btn-push">
+                        Reparación Específica
+                    </button>
+                    <button type="button" data-value="Modificación" 
+                            class="service-btn bg-gray-100 text-gray-700 py-3 rounded-xl shadow-md hover:bg-primary-blue hover:text-white transition duration-200 ease-in-out font-semibold text-sm btn-push">
+                        Modificación/Upgrade
+                    </button>
+                    <button type="button" data-value="Diagnóstico" 
+                            class="service-btn bg-gray-100 text-gray-700 py-3 rounded-xl shadow-md hover:bg-primary-blue hover:text-white transition duration-200 ease-in-out font-semibold text-sm btn-push">
+                        Diagnóstico Técnico
+                    </button>
+                </div>
+                <!-- Campo oculto para almacenar el servicio seleccionado -->
+                <input type="hidden" id="service" name="service" required>
+            </div>
+
+            <!-- Contenedor para Fecha y Hora -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Fecha 📆</label>
+                    <input type="date" id="date" name="date" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-accent-cyan focus:border-accent-cyan transition duration-150 ease-in-out text-gray-800">
+                </div>
+                <div>
+                    <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Hora Preferida ⏰</label>
+                    <input type="time" id="time" name="time" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-accent-cyan focus:border-accent-cyan transition duration-150 ease-in-out text-gray-800">
+                </div>
+            </div>
+
+            <!-- Área de Mensajes de Validación -->
+            <div id="message-area" class="text-center h-6">
+                <!-- Los mensajes de error o éxito se mostrarán aquí -->
+            </div>
+
+            <!-- Botón de Envío - El más llamativo y con efecto de pulsación -->
+            <button type="submit" 
+                    id="submit-btn"
+                    class="btn-push w-full bg-accent-cyan text-white py-3 rounded-xl font-bold text-lg shadow-lg shadow-accent-cyan/50 hover:bg-cyan-600 transition duration-150 ease-in-out">
+                Enviar Solicitud de Cita por WhatsApp
+            </button>
+        </form>
+        
+        <p class="text-xs text-gray-500 mt-4 text-center">
+            📣 Al enviar, serás redirigido a WhatsApp para confirmar la cita.
+        </p>
+
+    </div>
+
+    <script>
+        const form = document.getElementById('appointment-form');
+        const serviceButtons = document.querySelectorAll('.service-btn');
+        const serviceInput = document.getElementById('service');
+        const messageArea = document.getElementById('message-area');
+        const waNumber = '18094444944'; // Número de WhatsApp para el envío
+
+        // --- Lógica para la selección de servicio con botones UI minimalistas ---
+        serviceButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // 1. Quitar el estilo de seleccionado de todos los botones
+                serviceButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary-blue', 'text-white', 'shadow-xl', 'ring-2', 'ring-offset-2', 'ring-accent-cyan');
+                    btn.classList.add('bg-gray-100', 'text-gray-700');
+                    btn.style.borderColor = 'transparent';
+                });
+                
+                // 2. Aplicar el estilo de seleccionado al botón actual
+                button.classList.add('bg-primary-blue', 'text-white', 'shadow-xl', 'ring-2', 'ring-offset-2', 'ring-accent-cyan');
+                button.classList.remove('bg-gray-100', 'text-gray-700');
+                
+                // 3. Establecer el valor en el campo oculto
+                serviceInput.value = button.dataset.value;
+                
+                // 4. Limpiar cualquier mensaje de error anterior
+                messageArea.innerHTML = '';
+            });
+        });
+
+        // --- Lógica de envío del formulario ---
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevenir el envío estándar del formulario
+            messageArea.innerHTML = ''; // Limpiar mensajes
+
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const service = serviceInput.value;
+
+            // Validaciones
+            if (!name || !phone || !date || !time || !service) {
+                messageArea.innerHTML = '<p class="text-red-600 text-sm font-semibold">¡Por favor, completa todos los campos y selecciona un servicio!</p>';
+                return;
+            }
+
+            // Construcción del mensaje de WhatsApp
+            const messageText = `¡Hola! Soy ${name} y me gustaría agendar una cita.
+            
+*Servicio:* ${service}
+*Fecha Preferida:* ${date}
+*Hora Preferida:* ${time}
+*Teléfono:* ${phone}
+            
+Agradezco la confirmación de disponibilidad.`;
+
+            // Codificar el mensaje para la URL
+            const encodedMessage = encodeURIComponent(messageText);
+
+            // Crear la URL de WhatsApp
+            const waUrl = `https://wa.me/${waNumber}?text=${encodedMessage}`;
+
+            // Mostrar mensaje de éxito y redirigir
+            messageArea.innerHTML = '<p class="text-green-600 text-sm font-semibold">Redirigiendo a WhatsApp... ¡Solo falta un clic!</p>';
+            
+            // Redirigir al usuario (simulando el envío automático lo mejor posible)
+            setTimeout(() => {
+                 window.location.href = waUrl;
+            }, 500); // Pequeño retraso para que el usuario vea el mensaje de redirección
+        });
+        
+        // --- Restricción de fecha: no permitir fechas pasadas ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const year = today.getFullYear();
+            let month = today.getMonth() + 1;
+            let day = today.getDate();
+
+            // Formatear mes y día con cero inicial si es necesario
+            if (month < 10) month = '0' + month;
+            if (day < 10) day = '0' + day;
+
+            const minDate = `${year}-${month}-${day}`;
+            dateInput.setAttribute('min', minDate);
+        });
+
+    </script>
+</body>
+</html>
+
